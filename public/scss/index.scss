@@ -1,0 +1,159 @@
+//index.html
+
+#lefttop-logo img{
+  left: 0;
+  top: 0;
+  position: fixed;
+  z-index: 9999;
+  text-align: center;
+}
+
+#nav-container{
+  margin-left: 5%;
+  width: 88%;
+}
+
+#logo{
+  font-size: 22px;
+  font-family: '微軟正黑體';
+  font-weight: 600;
+}
+
+#logo img{
+  height: 40px;
+  margin: 8px 3px 8px 3px;
+}
+
+#banner-bg-img{
+  height: 250px;
+  // background-image: url("../images/banner_white.jpg");
+  background-position: 25% 41%;
+  background-size: cover;
+}
+
+#banner-deco{
+  height: 3px;
+  background-color: $color-main;
+}
+
+.navbar{
+  background-color: $color-main-bg;  
+}
+
+.navbar a{
+  color: $color-main;
+  font-weight: 600;
+}
+.nav > li{
+  padding-top: 5px;
+}
+
+.nav > li > a:hover {
+  background-color: $color-main-bg-complementary;
+}
+
+.highlight{
+  min-height: 250px;
+  background-color: $color-structure;
+}
+
+#catalog-nav{
+  padding: 20px 10px;
+  text-align: center;
+  background-repeat: cover;
+}
+
+.catalog-bg{
+  // background-image: url("../images/catalog.png");
+}
+
+.catalog-btn{
+  font-weight: 500;
+  margin: 7px;
+  border-color: $color-main;
+  color: $color-main;
+  padding-left: 30px;
+  padding-right: 30px;
+  box-shadow: 3px 3px 3px rgba(193, 193, 185, 0.5);
+}
+
+#catalog-nav a:hover{
+  background-color: $color-main;
+  color: #ffffff;
+}
+
+#status{
+  padding: 50px 20px;
+  padding-top: 170px;
+  text-align: center;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+#status #title{
+  color: white;
+  font-size: 80px;
+  display: inline-block;
+}
+
+#title-deco{
+  color: white;
+  font-size: 80px;
+  display: inline-block;
+}
+
+#status button{
+  font-size: 18px;
+}
+
+#searh-bar{
+  text-align: center;
+}
+
+#checks{
+  font-size: 16px;
+}
+
+#real-ig{
+  font-size: 28px;
+  text-align: center;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+#hightlight #title{
+  
+}
+
+#landing{
+  margin-top: 0px;
+  text-align: center;
+}
+
+#landing img{
+  height: 260px;
+  width: 260px;
+}
+
+#landing .img{
+  padding: 15px 15px;
+  display: inline-block;
+}
+
+#footer{
+
+  #footer-bg{
+    text-align: center;
+  }
+
+  #footer-logo{
+    text-align: center;
+    padding-bottom: 25px;
+    font-size: 10px;
+  }
+
+  #footer-des{
+    padding-bottom: 10px;
+    color: $color-main;
+    font-size: 8px;
+  }
+
+}

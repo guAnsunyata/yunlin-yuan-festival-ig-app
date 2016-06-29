@@ -1,0 +1,35 @@
+$color-main: #2d2d2d;
+$color-main-complementary: #2d2d2d;
+$color-main-bg: #ffffff;
+$color-main-bg-complementary: #F0F0F0;
+$color-structure: #EFEFEF;
+@import url(http://fonts.googleapis.com/earlyaccess/notosanstc.css);
+
+// global styling setting
+
+body{
+  font-family: "微軟正黑體";
+  background-color: white;
+  background-repeat: no-repeat;
+  background-position: bottom;
+}
+
+// styling helper
+
+.img-rounded {
+  border-radius: 6px;
+  box-shadow: 0 3px 3px rgba(193, 193, 185, 0.5);
+}
+
+button.btn-main{
+  color: white;
+  background-color: $color-main;
+  padding: 10px 20px;
+}
+button.btn-main:hover{
+  color: white;
+  background-color: $color-main-complementary;
+  padding: 10px 20px;
+}
+
+@import 'index';

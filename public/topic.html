@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>2017台灣燈會在雲林</title>
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/main.css" rel="stylesheet">
+    <link href="./css/topic.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+</head>
+<script type="text/javascript">
+    var pre_scroll = 0; 
+    $(window).scroll(function (event) {
+        var scroll = $(window).scrollTop();
+        var h = $("#lefttop-logo-img").css('top').replace('px','');
+        h = parseInt(h);
+        if(scroll > pre_scroll){
+            if(h > -85){
+                var n_h = h - 2;
+                $("#lefttop-logo-img").css('top', n_h);
+            }
+        }else{
+            if(h < 0){
+                var n_h = h + 2;
+                $("#lefttop-logo-img").css('top', n_h);
+            }
+        }
+        pre_scroll = scroll;
+    });
+</script>
+
+<body>
+    <div id="lefttop-logo"><img id="lefttop-logo-img" src="./images/logo.png" /></div>
+    <!-- navbar -->
+    <div class="navbar navbar-fixed-top" role="banner"> 
+        <div id="nav-container" class="container"> 
+            <div class="navbar-header">
+                <span id="logo"></span>
+            </div>
+            <div class="collapse navbar-collapse"> 
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="scroll"><a href="">數據里程碑</a></li> 
+                    <li class="scroll"><a href="">燈會導覽</a></li> 
+                    <li class="scroll"><a href="">交通資訊</a></li> 
+                    <li class="scroll"><a class="glyphicon glyphicon-th" aria-hidden="true"></a></li>
+                </ul> 
+            </div> 
+        </div> 
+        <div id="banner-deco"></div>
+    </div>
+    
+    <div id="topic-pic">
+        <div id="title">學生餐廳湖畔</div>
+        <div id="des">
+            <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> 國立雲林科技大學 學生活動中心 經度142.222 緯度 185.666
+        </div>
+    </div>
+    <div id="detail">
+    <div id="title">學生餐廳湖畔區</div>
+    <div id="location"><span style="color: #489cdf" class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> 國立雲林科技大學 學生活動中心 經度142.222 緯度 185.666<br/></div>
+    <hr/>
+    今年雲科大區「學生餐廳湖畔」以美麗絕倫的河畔為主題，運用全彩LED光源創新搭配4D折射模式，打造高達26公尺，左執金箍棒、右托仙蟠桃、腳蹬觔斗雲、身穿金鎧甲的齊天大聖主燈，以現代化嶄新科技風貌，重現人們記憶深刻的猴年代表神話故事。今年除主燈高度再創新高外，首度於主燈雙眼手工鑲嵌大型水晶，以呈現主燈珍貴不凡質感，並象徵「火眼金睛，世界之星」的主燈絕世風采。
+    <br/>
+    <br/>
+    <br/>
+    <div id="ig">Instagram</div>
+    <span style="font-size: 16px;">學生餐廳湖畔區</span>
+    <div id="checks" style="font-size: 24px;"><a class="glyphicon glyphicon-map-marker" aria-hidden="true"></a><b> 3</b> 人次打卡</div>
+    <hr/>
+    <div id="landing" style="background-color: white;">
+        <div class="img">
+            當日
+            07:22:20
+            <div><img src="https://scontent.cdninstagram.com/t51.2885-15/e35/12093459_1026216097433587_2104844622_n.jpg?ig_cache_key=MTIxMjI2NDczMTg3NzE3NTY3Mw%3D%3D.2"></div>
+            <!-- <div style="position:absolute; left:0px; top:270px; width:200px; height:20px; background-color:#FFF;opacity: 0.4;">guansunyata</div> -->
+        </div>
+        <div class="img">
+            當日 
+            06:32:43
+            <div><img src="https://scontent-nrt1-1.cdninstagram.com/t51.2885-15/e35/13320100_1748971045319034_1794538253_n.jpg?ig_cache_key=MTI2NTg2Nzk0MTkyNjQzODMxNw%3D%3D.2"></div>
+        </div>
+        <div class="img">
+            當日 
+            18:32:20
+            <div><img src="https://scontent-nrt1-1.cdninstagram.com/t51.2885-15/e35/13397701_470799339794002_44020184_n.jpg?ig_cache_key=MTI3ODkwMDg4MTg2NjE2OTYzNQ%3D%3D.2"></div>
+        </div>
+    </div>
+    </div>
+
+    <!-- footer -->
+    <div id="footer">
+        <br/>
+        <br/>
+        <span style="font-size: 6px;">2017 Taiwan Latern Festival</span>
+    </div>
+
+</body>
+</html>

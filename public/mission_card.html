@@ -1,0 +1,374 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>shit</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link href="./css/main.css" rel="stylesheet">
+  </head>
+
+  <script type="text/javascript">
+      var oldPics;
+      var theUrl = 'http://128.199.127.18:3001/api/mission2';
+      var httpGetAsync = function(theUrl, callback){
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() { 
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                callback(xmlHttp.responseText);
+        }
+        xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+        xmlHttp.send(null);
+      }
+      var instaCompare = function (oldPics, newPics, callback) {
+        if (newPics.data.length >= 1) {
+          console.log('oldPics', oldPics);
+          console.log('newPics', newPics);
+          window.oldPics = newPics;
+          callback({
+            created_time: newPics.data[0].created_time,
+            images: newPics.data[0].images,
+            user: newPics.data[0].user
+          });
+        } else {
+          callback(null);
+        }
+      }
+      var checkNewPic = function() {
+        httpGetAsync(theUrl, function(data) {
+          var newPics = JSON.parse(data);
+          instaCompare(oldPics, newPics, function(data) {
+            if(data) {
+              
+              // got new pics, make some changes!
+              var utcSeconds = data.created_time;
+              var time = new Date(0); // The 0 there is the key, which sets the date to the epoch
+              time.setUTCSeconds(utcSeconds);
+              time = time.iddate();
+              var etime = document.getElementById("m2time");
+              etime.innerHTML = time;
+              var html = '<img src="'+data.images.low_resolution.url+'" alt="">';
+              var e = document.getElementById("m2");
+              e.innerHTML = html;
+              console.log(e);
+            } else {
+              
+              // no new pics
+              console.log('none yo');
+            }
+          });
+          setTimeout(function() {
+            checkNewPic();
+          }, 3000);
+        });
+      }
+
+      // get pics
+      httpGetAsync(theUrl, function(data) {
+        oldPics = JSON.parse(data);
+        oldPics.data.map(function(t){
+          var utcSeconds = t.created_time;
+          var time = new Date(0); // The 0 there is the key, which sets the date to the epoch
+          time.setUTCSeconds(utcSeconds);
+          time = time.iddate();
+          var html = '<img src="'+t.images.low_resolution.url+'" alt="">';
+          var e = document.getElementById("m2");
+          e.innerHTML = html;
+          console.log(e);
+        });
+      });
+      // start checking updates
+      setTimeout(function() {
+        checkNewPic();
+      }, 3000);
+
+      //Date format
+      Date.prototype.iddate = function() {
+        var yyyy = this.getFullYear() - 1911;
+        var MM = (this.getMonth()+1).toString(); // getMonth() is zero-based
+        var DD  = this.getDate().toString();
+        var hh = this.getHours().toString();
+        var mm = this.getMinutes().toString();
+        var ss = this.getSeconds().toString();
+
+        var prefix = '';
+
+        var now = new Date();
+        if(this.getDate() < '30'){
+          prefix = '昨日';
+        }
+
+        return '-' + yyyy + '/' + (MM[1]?MM:"0"+MM[0]) + '/' + (DD[1]?DD:"0"+DD[0]) + ' ' + (hh[1]?hh:"0"+hh[0]) + ":" + (mm[1]?mm:"0"+mm[0]) + '-'; // padding
+      };
+
+  </script>
+
+  <body>
+    <style>
+      .mission-wrap {
+        margin-left: auto;
+        margin-right: auto;
+        position: relative;
+        width: 220px;
+        box-shadow: 0px 0px 8px #888;
+        border-radius: 4px;
+      }
+      .mission-header {
+        width: 220px;
+        background-color: #C14432;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+      }
+      .mission-title {
+        margin: 0px;
+        min-height: 44px;
+        line-height: 44px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 22px;
+        color: #222;
+      }
+      .mission-time {
+        margin: 0px;
+        text-align: center;
+        font-size: 10px;
+        color: #eee;
+        letter-spacing: 1.5px;
+      }
+      .mission-pic {
+        position: relative;
+        height: 220px;
+        width: 220px;
+        background-color: #efefef;
+        box-shadow: inset 0px 1px 1px #aaa;
+      }
+      .mission-bg {
+        position: absolute;
+        height: 220px;
+        width: 220px;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        background-position: center;
+        opacity: .2;
+        background: url('http://i.imgur.com/CAnV61K.png') no-repeat;
+        background-position: center;
+      }
+      .mission-pic > img {
+        width: 220px;
+        height: 220px;
+      }
+      .mission-desc {
+        box-sizing: border-box;
+        height: 140px;
+        width: 220px;
+        padding: 10px 18px;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        background-color: #333;
+        color: #eee;
+        font-size: 13px;
+      }
+
+      .mission-hashtag {
+        font-size: 14px;
+        color: #eee;
+        background-color: #333;
+        padding: 2px 3px;
+        border-radius: 5px;
+      }
+
+      .unfinished {
+        position: absolute;
+        z-index: 2;
+        left: 54;
+        top: 0;
+        text-align: center;
+        padding-top: 82px;
+        font-size: 32px;
+        letter-spacing: 4px;
+        font-weight: 600;
+        color: #999;
+      }
+      
+      .mission-header.bg2 {
+        /*background-color: #aaa;*/
+      }
+      .mission-pic.bg2 {
+        /*background-color: #eee;*/
+      }
+      .mission-desc.bg2 {
+        /*background-color: #777;*/
+      }
+
+      .person-info-wrap {
+        margin-left: 27%;
+        margin-top: 25px;
+        margin-bottom: 30px;
+      }
+      .profile-pic{
+        vertical-align:middle;
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        box-shadow: 0px 0px 4px #888;
+        background: url('http://imgur.com/h9quSwE.png');
+        background-size: 100px 100px;
+      }
+      .profile-info {
+        vertical-align:middle;
+        display: inline-block;
+        margin-left: 20px;
+      }
+      #userId {
+        font-size: 24px;
+        letter-spacing: 1px;
+      }
+      #userName {
+        font-size: 16px;
+        letter-spacing: 1px;
+        font-weight: bold;
+      }
+      #startTime {
+        letter-spacing: 1px;
+        margin-right: 50px;
+      }
+      #endTime {
+        letter-spacing: 1px;
+      }
+      hr {
+        width: 87%;
+        margin-bottom: 40px;
+      }
+    </style>
+
+    <!-- navbar -->
+    <div class="navbar navbar-fixed-top" role="banner"> 
+        <div id="nav-container" class="container"> 
+            <div class="navbar-header">
+                <span id="logo"></span>
+            </div>
+            <div class="collapse navbar-collapse"> 
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="scroll"><a href="">數據里程碑</a></li> 
+                    <li class="scroll"><a href="">燈會導覽</a></li> 
+                    <li class="scroll"><a href="">交通資訊</a></li> 
+                    <li class="scroll"><a class="glyphicon glyphicon-th" aria-hidden="true"></a></li>
+                </ul> 
+            </div> 
+        </div> 
+        <div id="banner-deco"></div>
+    </div>
+
+    <div class="container" style="margin-top: 90px;">
+      <div class="row">
+        <div class="person-info-wrap">
+          <div class="profile-pic"></div>
+          <div class="profile-info">
+            <p id="userId">2017TWLanternFestival</p>
+            <p id="userName">2017 Taiwan Lantern Festival</p>
+            <p>
+              開始逛遊時間: <span id="startTime">2016/06/28 15:32</span>
+              結束逛遊時間: <span id="endTime">--:--</span>
+            </p>
+          </div>
+        </div>
+        <hr>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="mission-wrap">
+            <div class="mission-header">
+              <p class="mission-title">傳統 <span class="mission-hashtag">#2017lfmission1</span></p>
+              <p class="mission-time">- 105/06/29 16:33 -</p>
+            </div>
+            <div class="mission-pic">
+              <img src="http://imgur.com/klvb783.png" alt="">
+            </div>
+            <div class="mission-desc">
+              傳統燈區為臺灣本土燈藝師精雕細琢的發想創意，呈現雲林縣特色。邀請您在此燈區拍照，並上傳instagram，即可完成任務！
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="mission-wrap">
+            <div class="mission-header">
+              <p class="mission-title">卡通 <span class="mission-hashtag">#2017lfmission2</span></p>
+              <p id="m2time" class="mission-time">-</p>
+            </div>
+            <div id="m2" class="mission-pic">
+              <div class="mission-bg"></div>
+              <div class="unfinished">未完成</div>
+            </div>
+            <div class="mission-desc">
+              卡通燈區利用傳統或其他燈藝方式呈現科技、使得科幻、卡通等歡樂氛圍聚集於燈區各角落。在此邀請您與一位您最喜歡的卡通人物拍照，並上傳instagram，即可完成此任務。
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="mission-wrap">
+            <div class="mission-header">
+              <p class="mission-title">創意 <span class="mission-hashtag">#2017lfmission3</span></p>
+              <p class="mission-time">-</p>
+            </div>
+            <div class="mission-pic">
+              <div class="mission-bg"></div>
+              <div class="unfinished">未完成</div>
+            </div>
+            <div class="mission-desc">
+              創意燈區以「海洋派對」為主軸。情境設定海神波賽頓將要熱情召集海洋裡的夥伴們，籌劃一場歡樂盛大的海洋音樂派對。希望您可以展現身上任何藍色的物品、吊飾或衣物於該燈區打卡拍照。
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="mission-wrap">
+            <div class="mission-header">
+              <p class="mission-title">活動 <span class="mission-hashtag">#2017lfmission4</span></p>
+              <p class="mission-time">-</p>
+            </div>
+            <div class="mission-pic">
+              <div class="mission-bg"></div>
+              <div class="unfinished">未完成</div>
+            </div>
+            <div class="mission-desc">
+              燈會看燈之外，別忘了也有一些活動喔，此任務以下兩項選擇其一完成即可。<br>(1) 取得大會提供的提燈，並與其拍照上傳打卡   (2) 於現場猜燈謎，並拍照tag自己所猜的燈謎與答案
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="mission-wrap">
+            <div class="mission-header">
+              <p class="mission-title">主燈 <span class="mission-hashtag">#2017lfmission5</span></p>
+              <p class="mission-time">-</p>
+            </div>
+            <div class="mission-pic">
+              <div class="mission-bg"></div>
+              <div class="unfinished">未完成</div>
+            </div>
+            <div class="mission-desc">
+              今年主燈與今年的生肖-雞有關係，以現代化嶄新科技風貌，重現人們記憶深刻的雞年代表神話故事。請觀眾在此燈區做出有關於「雞」的姿勢與主燈拍照上傳且在照片評論中留下祝福的話。
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="mission-wrap">
+            <div class="mission-header">
+              <p class="mission-title">表演 <span class="mission-hashtag">2017lfmission6</span></p>
+              <p class="mission-time">-</p>
+            </div>
+            <div class="mission-pic">
+              <div class="mission-bg"></div>
+              <div class="unfinished">未完成</div>
+            </div>
+            <div class="mission-desc">
+              來燈會不看表演怎麼能行?我們今年的表演精彩可期、邀請觀眾一同來同樂。邀請您拍照，並於相片評論中留下對今年燈會的評論。
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

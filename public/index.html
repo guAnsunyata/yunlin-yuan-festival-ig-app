@@ -74,6 +74,98 @@
       }
 </script>
 
+<script type="text/javascript">
+    var oldPics;
+    var theUrl = 'http://128.199.127.18:3001/api/tag';
+    var httpGetAsync = function(theUrl, callback){
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function() { 
+          if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+              callback(xmlHttp.responseText);
+      }
+      xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+      xmlHttp.send(null);
+    }
+    var instaCompare = function (oldPics, newPics, callback) {
+      if (oldPics.data[0].id != newPics.data[0].id) {
+        console.log('oldPics', oldPics);
+        console.log('newPics', newPics);
+        window.oldPics = newPics;
+        callback({
+          created_time: newPics.data[0].created_time,
+          images: newPics.data[0].images,
+          user: newPics.data[0].user
+        });
+      } else {
+        callback(null);
+      }
+    }
+    var checkNewPic = function() {
+      httpGetAsync(theUrl, function(data) {
+        var newPics = JSON.parse(data);
+        instaCompare(oldPics, newPics, function(data) {
+          if(data) {
+            
+            // got new pics, make some changes!
+            var utcSeconds = data.created_time;
+            var time = new Date(0); // The 0 there is the key, which sets the date to the epoch
+            time.setUTCSeconds(utcSeconds);
+            time = time.iddate();
+            var html = '<div class="img"><div><img src="'+data.images.low_resolution.url+'"></div><a id="time-tag" class="" style="color: #602020"aria-hidden="true">'+time+'</a></div>';
+            console.log('yo');
+            $('#landing').prepend(html);
+            $("#sums").html(newPics.length);
+          } else {
+            
+            // no new pics
+            console.log('none yo');
+          }
+        });
+        setTimeout(function() {
+          checkNewPic();
+        }, 3000);
+      });
+    }
+
+    // get pics
+    httpGetAsync(theUrl, function(data) {
+      oldPics = JSON.parse(data);
+      $("#sums").html(oldPics.data.length);
+      oldPics.data.map(function(t){
+        var utcSeconds = t.created_time;
+        var time = new Date(0); // The 0 there is the key, which sets the date to the epoch
+        time.setUTCSeconds(utcSeconds);
+        time = time.iddate();
+        var html = '<div class="img"><div><img src="'+t.images.low_resolution.url+'"></div>';
+        $('#landing').append(html);
+      });
+    });
+    // start checking updates
+    setTimeout(function() {
+      checkNewPic();
+    }, 3000);
+
+    //Date format
+    Date.prototype.iddate = function() {
+      var yyyy = this.getFullYear() - 1911;
+      var MM = (this.getMonth()+1).toString(); // getMonth() is zero-based
+      var DD  = this.getDate().toString();
+      var hh = this.getHours().toString();
+      var mm = this.getMinutes().toString();
+      var ss = this.getSeconds().toString();
+
+      var prefix = '';
+
+      var now = new Date();
+      if(this.getDate() < '30'){
+        prefix = '昨日';
+      }
+
+      return prefix + (hh[1]?hh:"0"+hh[0]) + ":" + (mm[1]?mm:"0"+mm[0]) + ":" + (ss[1]?ss:"0"+ss[0]); // padding
+    };
+
+</script>
+
 <body>
     <div id="player" style="position: fixed; top: -16%; z-index: -99; width: 100%; height: 100%; opacity: 0.9">
       <iframe frameborder="0" height="100%" width="100%" 
@@ -104,8 +196,8 @@
         <div id="title-deco"></div>
         <br/>
         <div>
-            <button class="btn btn-info">您的相片</button>
-            <button class="btn btn-success">數據統計</button>
+            <button id="profile_btn" class="btn btn-danger" onclick="location.href='mission_card.html'"">檢視您的專屬頁面</button>
+            <br/><a href="/" style="color: white;">活動說明</a>
         </div>
     </div>
 
@@ -120,32 +212,27 @@
     <div id="real-ig" style="background-color: white;">
     <hr/>
         <div id="title">Instagram</div>
-        <div id="checks"><a class="glyphicon glyphicon-map-marker" aria-hidden="true"></a> 3 人次打卡</div>
+        <div id="checks"><a class="glyphicon glyphicon-map-marker" aria-hidden="true"></a><span id="sums"></span> 人次打卡</div>
         <span style="font-size: 12px;">#2017台灣燈會在雲林</span>
     </div>
 
     <div id="landing" style="background-color: white;">
-        <div class="img">
-            當日 
-            18:32:20
+        <!-- <div class="img">
             <div><img src="https://scontent.cdninstagram.com/t51.2885-15/e35/12093459_1026216097433587_2104844622_n.jpg?ig_cache_key=MTIxMjI2NDczMTg3NzE3NTY3Mw%3D%3D.2"></div>
-            <!-- <div style="position:absolute; left:0px; top:270px; width:200px; height:20px; background-color:#FFF;opacity: 0.4;">guansunyata</div> -->
+            <a id="time-tag" class="glyphicon glyphicon-camera" style="color: #602020" aria-hidden="true">20:23:22</a>
         </div>
         <div class="img">
-            當日 
-            18:32:20
             <div><img src="https://scontent.cdninstagram.com/t51.2885-15/e35/12070670_1355027017856309_1065254514_n.jpg?ig_cache_key=MTIxMTM5NDQxNDg3NzE4MjU1OA%3D%3D.2"></div>
+            <a id="time-tag" class="glyphicon glyphicon-camera" style="color: #602020" aria-hidden="true">19:41:23</a>
         </div>
         <div class="img">
-            當日 
-            18:32:20
             <div><img src="https://scontent.cdninstagram.com/t51.2885-15/e35/12816824_187355588320412_1424223373_n.jpg?ig_cache_key=MTIxMTM4ODc5MDE4MTMwMDc0MA%3D%3D.2"></div>
+            <a id="time-tag" class="glyphicon glyphicon-camera" style="color: #602020" aria-hidden="true">18:23:22</a>
         </div>
         <div class="img">
-            當日 
-            18:32:20
             <div><img src="https://scontent.cdninstagram.com/t51.2885-15/e35/10706699_975488095852750_263655265_n.jpg?ig_cache_key=MTIxMDIwMjEwOTEzODc5OTI5NA%3D%3D.2"></div>
-        </div>
+            <a id="time-tag" class="glyphicon glyphicon-camera" style="color: #602020" aria-hidden="true">19:41:03</a>
+        </div> --><!-- 
         <div class="img">
             <img src="https://scontent.cdninstagram.com/t51.2885-15/e35/10706699_975488095852750_263655265_n.jpg?ig_cache_key=MTIxMDIwMjEwOTEzODc5OTI5NA%3D%3D.2">
         </div>
@@ -157,35 +244,42 @@
         </div>
         <div class="img">
             <img src="https://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/12783414_342292005894497_517640110_n.jpg?ig_cache_key=MTE5OTgxMjE4ODQ5OTA5MzE0OQ%3D%3D.2">
-        </div>
+        </div> -->
     </div>
 
     <div id="stars">
     <br/>
     <a href="/">更多相片</a>
-    <hr/>
-        <div id="title">燈會主題</div>
+    <hr style="height: 1px; margin-top: 30px; margin-bottom: 30px;" />
+        <div id="title">燈會導覽</div>
         <div class="card-wrapper">
             <span class="label label-primary" style="position: absolute; top: 20px; right: 20px; z-index: 9999; font-size: 12px; padding: 8px;">主燈區</span>
             <div class="card-img"><img src="https://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/12825807_1721136811456963_512871513_n.jpg?ig_cache_key=MTIwMzcwNjc1NTE2Nzc1NDI1Mg%3D%3D.2" /></div>
             <div class="card-des">
                 <div class="title">賀歲茶壺</div>
+                <div><a class="glyphicon glyphicon-map-marker" aria-hidden="true"></a> 3 人次打卡</div>
+                <hr />
                 2017年台灣燈會在雲林將結合雞年主題以「金猴獻桃」為概念出發，由交通部觀光局設置猴年主副燈、迎賓燈區、祈福燈林、主題燈幕、交流燈區、競賽燈區、傳統燈區及歡樂燈區等，並由桃園市政府規劃運用光影互動技術，型塑桃園智慧城市意象的「智慧科技燈區」。
             </div>
         </div>
         <div class="card-wrapper">
-            <span class="label label-primary" style="position: absolute; top: 20px; right: 20px; z-index: 9999; font-size: 12px; padding: 8px;">主燈區</span>
-            <div class="card-img"><img src="https://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/12825807_1721136811456963_512871513_n.jpg?ig_cache_key=MTIwMzcwNjc1NTE2Nzc1NDI1Mg%3D%3D.2" /></div>
+            <span class="label label-success" style="position: absolute; top: 20px; right: 20px; z-index: 9999; font-size: 12px; padding: 8px;">副燈區</span>
+            <div class="card-img"><img src="https://scontent-nrt1-1.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/12519584_1515757315399355_1013588447_n.jpg?ig_cache_key=MTIwMDYwNDkwNTQyODAyMDI3Ng%3D%3D.2" /></div>
             <div class="card-des">
-                <div class="title">賀歲茶壺</div>
+                <div class="title">舞動桃源</div>
+                <div><a class="glyphicon glyphicon-map-marker" aria-hidden="true"></a> 4 人次打卡</div>
+                <hr />
                 2017年台灣燈會在桃園將結合猴年主題以「金猴獻桃」為概念出發，由交通部觀光局設置猴年主副燈、迎賓燈區、祈福燈林、主題燈幕、交流燈區、競賽燈區、傳統燈區及歡樂燈區等，並由桃園市政府規劃運用光影互動技術，型塑桃園智慧城市意象的「智慧科技燈區」。
             </div>
         </div>
         <div class="card-wrapper">
-            <span class="label label-primary" style="position: absolute; top: 20px; right: 20px; z-index: 9999; font-size: 12px; padding: 8px;">主燈區</span>
-            <div class="card-img"><img src="https://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/12825807_1721136811456963_512871513_n.jpg?ig_cache_key=MTIwMzcwNjc1NTE2Nzc1NDI1Mg%3D%3D.2" /></div>
+            <span class="label label-warning" style="position: absolute; top: 20px; right: 20px; z-index: 9999; font-size: 12px; padding: 8px;">繞燈區</span>
+            <div class="card-img"><img src="https://scontent-nrt1-1.cdninstagram.com/t51.2885-15/e35/12751256_1140017909341927_541180434_n.jpg?ig_cache_key=MTIwMDAzNDE4MDQ2NjM2MzQ5Mg%3D%3D.2
+" /></div>
             <div class="card-des">
-                <div class="title">賀歲茶壺</div>
+                <div class="title">繚繞之鳥</div>
+                <div><a class="glyphicon glyphicon-map-marker" aria-hidden="true"></a> 2 人次打卡</div>
+                <hr />
                 2017年台灣燈會在桃園將結合猴年主題以「金猴獻桃」為概念出發，由交通部觀光局設置猴年主副燈、迎賓燈區、祈福燈林、主題燈幕、交流燈區、競賽燈區、傳統燈區及歡樂燈區等，並由桃園市政府規劃運用光影互動技術，型塑桃園智慧城市意象的「智慧科技燈區」。
             </div>
         </div>
@@ -194,6 +288,8 @@
             <div class="card-img"><a href="./topic.html"><img src="https://scontent-nrt1-1.cdninstagram.com/t51.2885-15/e35/13397701_470799339794002_44020184_n.jpg?ig_cache_key=MTI3ODkwMDg4MTg2NjE2OTYzNQ%3D%3D.2" /></a></div>
             <div class="card-des">
                 <div class="title">學生餐廳胡畔</div>
+                <div><a class="glyphicon glyphicon-map-marker" aria-hidden="true"></a> 3 人次打卡</div>
+                <hr />
                 2017年台灣燈會在桃園將結合猴年主題以「金猴獻桃」為概念出發，由交通部觀光局設置猴年主副燈、迎賓燈區、祈福燈林、主題燈幕、交流燈區、競賽燈區、傳統燈區及歡樂燈區等，並由桃園市政府規劃運用光影互動技術，型塑桃園智慧城市意象的「智慧科技燈區」。
             </div>
         </div>

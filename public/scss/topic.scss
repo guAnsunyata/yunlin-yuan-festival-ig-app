@@ -1,25 +1,25 @@
 
-#topic-pic{
-  margin-top: 50px;
-  height: 400px;
-  text-align: center;
-  background-image: url("https://scontent-nrt1-1.cdninstagram.com/t51.2885-15/e35/13397701_470799339794002_44020184_n.jpg?ig_cache_key=MTI3ODkwMDg4MTg2NjE2OTYzNQ%3D%3D.2");
-  background-size: cover;
-  background-position: center;
-  img{
+  #topic-pic{
+    margin-top: 50px;
+    height: 400px;
+    text-align: center;
+    background-image: url("https://scontent-nrt1-1.cdninstagram.com/t51.2885-15/e35/13397701_470799339794002_44020184_n.jpg?ig_cache_key=MTI3ODkwMDg4MTg2NjE2OTYzNQ%3D%3D.2");
+    background-size: cover;
+    background-position: center;
+    img{
 
+    }
+    #title{
+      padding-top: 140px;
+      font-size: 42px;
+      color: white;
+    }
+    #des{
+      font-size: 16px;
+      margin: 20px 30%;
+      color: white;
+    }
   }
-  #title{
-    padding-top: 140px;
-    font-size: 42px;
-    color: white;
-  }
-  #des{
-    font-size: 16px;
-    margin: 20px 30%;
-    color: white;
-  }
-}
 
   #detail{
     margin: 20px 15%;

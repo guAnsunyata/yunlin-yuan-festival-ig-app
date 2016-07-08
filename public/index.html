@@ -76,7 +76,7 @@
 
 <script type="text/javascript">
     var oldPics;
-    var theUrl = 'http://128.199.127.18:3001/api/tag';
+    var theUrl = 'http://127.0.0.1:8000/api/tag';
     var httpGetAsync = function(theUrl, callback){
       var xmlHttp = new XMLHttpRequest();
       xmlHttp.onreadystatechange = function() { 
@@ -111,7 +111,7 @@
             var time = new Date(0); // The 0 there is the key, which sets the date to the epoch
             time.setUTCSeconds(utcSeconds);
             time = time.iddate();
-            var html = '<div class="img"><div><img src="'+data.images.low_resolution.url+'"></div><a id="time-tag" class="" style="color: #602020"aria-hidden="true">'+time+'</a></div>';
+            var html = '<div class="img"><div><img src="'+data.images.low_resolution.url+'"></div></div>';
             console.log('yo');
             $('#landing').prepend(html);
             $("#sums").html(newPics.length);
